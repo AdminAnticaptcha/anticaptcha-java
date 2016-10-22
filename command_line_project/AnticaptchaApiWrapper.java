@@ -53,6 +53,31 @@ class AnticaptchaApiWrapper {
         return null;
     }
 
+    public static AnticaptchaTask createNoCaptchaTaskProxyless(String host, String clientKey, String websiteUrl, String websiteKey){      
+        String json = "{\n" +
+                "  \"clientKey\": \"" + clientKey + "\",\n" +
+                "  \"task\": {\n" +
+                "    \"type\": \"NoCaptchaTaskProxyless\",\n" +
+                "    \"websiteURL\": \"" + websiteUrl + "\",\n" +
+                "    \"websiteKey\": \"" + websiteKey + "\"\n" +
+                
+                "  }\n" +
+                "}";
+    try {
+            JSONObject resultJson = jsonPostRequest(host, "createTask", json);
+
+            return new AnticaptchaTask(
+                    resultJson.has("taskId") ? resultJson.getInt("taskId") : null,
+                    resultJson.has("errorId") ? resultJson.getInt("errorId") : null,
+                    resultJson.has("errorCode") ? resultJson.getString("errorCode") : null,
+                    resultJson.has("errorDescription") ? resultJson.getString("errorDescription") : null
+            );
+        }
+        catch (Exception ignored) {}
+
+        return null;
+    }
+
     static AnticaptchaTask createImageToTextTask(String host, String clientKey, String body) {
         return createImageToTextTask(host, clientKey, body, null, null, null, null, null, null);
     }
